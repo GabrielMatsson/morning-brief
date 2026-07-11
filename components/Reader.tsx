@@ -15,10 +15,15 @@ export default function Reader({
   const [flipDir, setFlipDir] = useState<1 | -1>(1);
 
   useEffect(() => {
-    const fromHash = papers.findIndex(
-      (p) => `#${p.config.id}` === window.location.hash
-    );
-    if (fromHash >= 0) setActive(fromHash);
+    const applyHash = () => {
+      const fromHash = papers.findIndex(
+        (p) => `#${p.config.id}` === window.location.hash
+      );
+      if (fromHash >= 0) setActive(fromHash);
+    };
+    applyHash();
+    window.addEventListener("hashchange", applyHash);
+    return () => window.removeEventListener("hashchange", applyHash);
   }, [papers]);
 
   const switchTo = useCallback(
@@ -39,6 +44,37 @@ export default function Reader({
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
+  }, [active, switchTo]);
+
+  // Touch: swipe horizontally to flip papers (the tab bar scrolls instead).
+  useEffect(() => {
+    let startX = 0;
+    let startY = 0;
+    let fromTabbar = false;
+
+    const onStart = (e: TouchEvent) => {
+      const t = e.touches[0];
+      startX = t.clientX;
+      startY = t.clientY;
+      fromTabbar = !!(e.target as Element | null)?.closest?.(".tabbar");
+    };
+    const onEnd = (e: TouchEvent) => {
+      if (fromTabbar) return;
+      const t = e.changedTouches[0];
+      const dx = t.clientX - startX;
+      const dy = t.clientY - startY;
+      if (Math.abs(dx) > 60 && Math.abs(dx) > 2 * Math.abs(dy)) {
+        if (dx < 0) switchTo(active + 1, 1);
+        else switchTo(active - 1, -1);
+      }
+    };
+
+    window.addEventListener("touchstart", onStart, { passive: true });
+    window.addEventListener("touchend", onEnd, { passive: true });
+    return () => {
+      window.removeEventListener("touchstart", onStart);
+      window.removeEventListener("touchend", onEnd);
+    };
   }, [active, switchTo]);
 
   const paper = papers[active];
