@@ -12,6 +12,7 @@ export default function Reader({
   generatedAt: string;
 }) {
   const [active, setActive] = useState(0);
+  const [flipDir, setFlipDir] = useState<1 | -1>(1);
 
   useEffect(() => {
     const fromHash = papers.findIndex(
@@ -21,8 +22,9 @@ export default function Reader({
   }, [papers]);
 
   const switchTo = useCallback(
-    (index: number) => {
+    (index: number, dir: 1 | -1) => {
       const next = (index + papers.length) % papers.length;
+      setFlipDir(dir);
       setActive(next);
       history.replaceState(null, "", `#${papers[next].config.id}`);
       window.scrollTo({ top: 0 });
@@ -32,8 +34,8 @@ export default function Reader({
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "ArrowRight") switchTo(active + 1);
-      if (e.key === "ArrowLeft") switchTo(active - 1);
+      if (e.key === "ArrowRight") switchTo(active + 1, 1);
+      if (e.key === "ArrowLeft") switchTo(active - 1, -1);
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
@@ -49,7 +51,7 @@ export default function Reader({
             <button
               key={p.config.id}
               className={`tab ${i === active ? "tab-active" : ""}`}
-              onClick={() => switchTo(i)}
+              onClick={() => switchTo(i, i > active ? 1 : -1)}
               aria-current={i === active ? "page" : undefined}
             >
               <span className="tab-order">{i + 1}</span>
@@ -62,7 +64,12 @@ export default function Reader({
         </div>
       </nav>
 
-      <PaperFront paper={paper} generatedAt={generatedAt} />
+      <div
+        key={paper.config.id}
+        className={flipDir === 1 ? "flip-in-right" : "flip-in-left"}
+      >
+        <PaperFront paper={paper} generatedAt={generatedAt} />
+      </div>
 
       <footer className="site-footer">
         <p>
