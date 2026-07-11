@@ -93,6 +93,128 @@ body {
   font-style: italic;
 }
 
+/* Placera — Avanza's news site: dark burgundy, red accents, bold sans */
+.paper-placera {
+  --paper-bg: #2a161c;
+  --ink: #f4edee;
+  --accent: #f2545f;
+  --muted: #b598a0;
+  --rule: #4a2b33;
+  --up: #34d178;
+  --down: #ff6b7a;
+  --masthead-font: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
+  --masthead-size: clamp(2.2rem, 5.5vw, 3.6rem);
+  --headline-font: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
+  font-family: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
+}
+
+.paper-placera .masthead-name {
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.paper-placera .masthead-name::after {
+  content: ".";
+  color: #e3120b;
+}
+
+.paper-placera .section-title {
+  border-top-color: var(--accent);
+  font-family: inherit;
+}
+
+.paper-placera .tagline,
+.paper-placera .dateline {
+  font-family: inherit;
+}
+
+/* Marknadsöversikt */
+.market-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 0.6rem 1.4rem;
+}
+
+.market-row {
+  display: grid;
+  grid-template-columns: 1fr auto auto auto;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 0.55rem 0.7rem;
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  text-decoration: none;
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.market-row:hover {
+  border-color: var(--accent);
+}
+
+.market-name {
+  font-weight: 600;
+  font-size: 0.88rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.spark {
+  width: 96px;
+  height: 26px;
+  flex: none;
+}
+
+.market-up .spark {
+  color: var(--up);
+}
+
+.market-down .spark {
+  color: var(--down);
+}
+
+.market-last {
+  font-variant-numeric: tabular-nums;
+  font-size: 0.88rem;
+  white-space: nowrap;
+}
+
+.market-currency {
+  color: var(--muted);
+  font-size: 0.75rem;
+}
+
+.market-change {
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  font-size: 0.88rem;
+  min-width: 5.2ch;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.market-up .market-change {
+  color: var(--up);
+}
+
+.market-down .market-change {
+  color: var(--down);
+}
+
+.market-note {
+  margin-top: 0.8rem;
+  font-size: 0.75rem;
+  font-style: italic;
+  color: var(--muted);
+}
+
+@media (max-width: 640px) {
+  .market-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* ---------------------------------------------------------------------------
    Tab bar (masthead switcher)
 --------------------------------------------------------------------------- */

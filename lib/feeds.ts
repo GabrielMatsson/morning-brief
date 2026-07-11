@@ -10,12 +10,16 @@ export interface SectionConfig {
 }
 
 export interface PaperConfig {
-  id: "wapo" | "nyt" | "wsj" | "ft" | "economist";
+  id: "wapo" | "nyt" | "wsj" | "ft" | "economist" | "placera";
   name: string;
   /** Short label for the masthead tab bar */
   tab: string;
-  /** How Dimon reads this paper — shown under the masthead */
+  /** How this paper is read — shown under the masthead */
   tagline: string;
+  /** "rss" (default) or "placera" (scraped SSR pages + market data) */
+  kind?: "rss" | "placera";
+  /** UI language for dates and small strings; default English */
+  lang?: "en" | "sv";
   sections: SectionConfig[];
 }
 
@@ -172,6 +176,21 @@ export const PAPERS: PaperConfig[] = [
         ],
         cap: 10,
       },
+    ],
+  },
+  {
+    id: "placera",
+    kind: "placera",
+    lang: "sv",
+    name: "Placera",
+    tab: "Placera",
+    tagline:
+      "Min egen sida — svenska marknadsnyheter från Avanzas Placera, med kurser som ögonblicksbild från morgonens bygge.",
+    // Placera has no RSS; these URLs are SSR pages parsed by lib/placera.ts.
+    sections: [
+      { title: "Förstasidan", urls: ["https://www.placera.se/"], cap: 12 },
+      { title: "Telegram", urls: ["https://www.placera.se/telegram"], cap: 10 },
+      { title: "Analys", urls: ["https://www.placera.se/analys"], cap: 8 },
     ],
   },
 ];

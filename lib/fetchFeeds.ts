@@ -1,5 +1,7 @@
 import Parser from "rss-parser";
 import { PAPERS, type PaperConfig, type SectionConfig } from "./feeds";
+import { fetchPlaceraPage } from "./placera";
+import { loadMarketData, type MarketData } from "./avanza";
 
 export interface Article {
   title: string;
@@ -20,6 +22,8 @@ export interface SectionData {
 export interface PaperData {
   config: PaperConfig;
   sections: SectionData[];
+  /** Marknadsöversikt quotes — only on the Placera paper */
+  market?: MarketData;
 }
 
 // WaPo (and others) return 403 to non-browser user agents.
@@ -95,10 +99,48 @@ async function fetchSection(section: SectionConfig): Promise<RawSection> {
   };
 }
 
+/** Like fetchSection, but scraped Placera pages keep their editorial order. */
+async function fetchPlaceraSection(section: SectionConfig): Promise<RawSection> {
+  const results = await Promise.allSettled(section.urls.map(fetchPlaceraPage));
+
+  const merged: Article[] = [];
+  const seen = new Set<string>();
+  for (const result of results) {
+    if (result.status === "rejected") {
+      console.warn(`[placera] failed: ${section.title}:`, result.reason?.message || result.reason);
+      continue;
+    }
+    for (const article of result.value) {
+      if (!seen.has(article.link)) {
+        seen.add(article.link);
+        merged.push(article);
+      }
+    }
+  }
+
+  return {
+    config: section,
+    articles: merged,
+    allFailed: results.every((r) => r.status === "rejected"),
+  };
+}
+
 export async function loadAllPapers(): Promise<PaperData[]> {
   return Promise.all(
     PAPERS.map(async (config) => {
-      const raw = await Promise.all(config.sections.map(fetchSection));
+      const isPlacera = config.kind === "placera";
+      const raw = await Promise.all(
+        config.sections.map(isPlacera ? fetchPlaceraSection : fetchSection)
+      );
+
+      let market: MarketData | undefined;
+      if (isPlacera) {
+        try {
+          market = await loadMarketData();
+        } catch (err) {
+          console.warn("[market] unavailable:", err);
+        }
+      }
 
       // A story shows once per paper: earlier sections (front page first)
       // claim their articles, later sections skip links already shown.
@@ -115,7 +157,7 @@ export async function loadAllPapers(): Promise<PaperData[]> {
         };
       });
 
-      return { config, sections };
+      return { config, sections, market };
     })
   );
 }

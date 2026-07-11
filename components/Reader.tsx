@@ -9,7 +9,7 @@ export default function Reader({
   generatedAt,
 }: {
   papers: PaperData[];
-  generatedAt: string;
+  generatedAt: { en: string; sv: string };
 }) {
   const [active, setActive] = useState(0);
   const [flipDir, setFlipDir] = useState<1 | -1>(1);
