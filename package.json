@@ -1,0 +1,24 @@
+{
+  "name": "morning-brief",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A daily front-page brief modeled on Jamie Dimon's morning reading: WaPo, NYT, WSJ, FT, The Economist.",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "preview": "serve out"
+  },
+  "dependencies": {
+    "next": "^15.3.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "rss-parser": "^3.13.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "serve": "^14.2.0",
+    "typescript": "^5.5.0"
+  }
+}

@@ -1,0 +1,328 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --serif-body: Georgia, "Times New Roman", Times, serif;
+}
+
+body {
+  font-family: var(--serif-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---------------------------------------------------------------------------
+   Per-paper themes. Each paper gets its own paper color, ink, accent and
+   masthead typography so switching tabs feels like picking up another paper.
+--------------------------------------------------------------------------- */
+
+.reader {
+  min-height: 100vh;
+  background: var(--paper-bg);
+  color: var(--ink);
+  transition: background 0.25s ease;
+}
+
+/* The Washington Post — white, black blackletter masthead */
+.paper-wapo {
+  --paper-bg: #ffffff;
+  --ink: #111111;
+  --accent: #111111;
+  --muted: #666666;
+  --rule: #cccccc;
+  --masthead-font: var(--font-blackletter), serif;
+  --masthead-size: clamp(2.4rem, 6vw, 4.2rem);
+  --headline-font: var(--font-playfair), Georgia, serif;
+}
+
+/* The New York Times — white, tighter gray rules, blackletter masthead */
+.paper-nyt {
+  --paper-bg: #ffffff;
+  --ink: #121212;
+  --accent: #326891;
+  --muted: #727272;
+  --rule: #dfdfdf;
+  --masthead-font: var(--font-blackletter), serif;
+  --masthead-size: clamp(2.4rem, 6vw, 4.2rem);
+  --headline-font: Georgia, "Times New Roman", serif;
+}
+
+/* The Wall Street Journal — ivory paper, engraved serif masthead */
+.paper-wsj {
+  --paper-bg: #f8f7f2;
+  --ink: #222222;
+  --accent: #0080c3;
+  --muted: #6f6f6f;
+  --rule: #d5d2c8;
+  --masthead-font: var(--font-playfair), "Playfair Display", Georgia, serif;
+  --masthead-size: clamp(2rem, 5vw, 3.4rem);
+  --headline-font: var(--font-playfair), Georgia, serif;
+}
+
+/* Financial Times — the pink paper, claret accents */
+.paper-ft {
+  --paper-bg: #fff1e5;
+  --ink: #33302e;
+  --accent: #990f3d;
+  --muted: #66605c;
+  --rule: #e6d9ce;
+  --masthead-font: var(--font-playfair), Georgia, serif;
+  --masthead-size: clamp(2rem, 5vw, 3.4rem);
+  --headline-font: var(--font-playfair), Georgia, serif;
+}
+
+/* The Economist — white, signature red block masthead */
+.paper-economist {
+  --paper-bg: #ffffff;
+  --ink: #0d0d0d;
+  --accent: #e3120b;
+  --muted: #6b6b6b;
+  --rule: #e0e0e0;
+  --masthead-font: var(--font-playfair), Georgia, serif;
+  --masthead-size: clamp(1.8rem, 4.5vw, 3rem);
+  --headline-font: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
+}
+
+.paper-economist .masthead-name {
+  display: inline-block;
+  background: #e3120b;
+  color: #ffffff;
+  padding: 0.35em 0.55em;
+  font-style: italic;
+}
+
+/* ---------------------------------------------------------------------------
+   Tab bar (masthead switcher)
+--------------------------------------------------------------------------- */
+
+.tabbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: #1a1a1a;
+  border-bottom: 3px solid var(--accent);
+}
+
+.tabbar-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  overflow-x: auto;
+  padding: 0 1rem;
+}
+
+.tab {
+  appearance: none;
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -3px;
+  color: #b5b0a8;
+  font-family: var(--serif-body);
+  font-size: 0.95rem;
+  padding: 0.85rem 0.9rem;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.tab:hover {
+  color: #ffffff;
+}
+
+.tab-active {
+  color: #ffffff;
+  border-bottom-color: var(--accent);
+  font-weight: bold;
+}
+
+.tab-order {
+  display: inline-block;
+  font-size: 0.7rem;
+  color: #8a857d;
+  margin-right: 0.45em;
+  vertical-align: 0.1em;
+}
+
+.tab-hint {
+  margin-left: auto;
+  color: #6f6a63;
+  font-size: 0.75rem;
+  font-style: italic;
+  padding-left: 1rem;
+  white-space: nowrap;
+}
+
+/* ---------------------------------------------------------------------------
+   Masthead & dateline
+--------------------------------------------------------------------------- */
+
+.paper {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem 3rem;
+}
+
+.masthead {
+  text-align: center;
+  padding: 1.6rem 0 0.9rem;
+}
+
+.masthead-name {
+  font-family: var(--masthead-font);
+  font-size: var(--masthead-size);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  line-height: 1.1;
+}
+
+.dateline {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1rem;
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.dateline::before,
+.dateline::after {
+  content: "";
+  flex: 1;
+  border-top: 1px solid var(--rule);
+}
+
+.tagline {
+  margin-top: 0.7rem;
+  font-style: italic;
+  color: var(--muted);
+  font-size: 0.95rem;
+  max-width: 46rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ---------------------------------------------------------------------------
+   Sections & stories
+--------------------------------------------------------------------------- */
+
+.paper-section {
+  margin-top: 2.2rem;
+}
+
+.section-title {
+  font-family: var(--serif-body);
+  font-size: 0.85rem;
+  font-weight: bold;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--accent);
+  border-top: 3px double var(--ink);
+  border-bottom: 1px solid var(--rule);
+  padding: 0.45rem 0;
+  margin-bottom: 1.2rem;
+}
+
+.section-unavailable {
+  font-style: italic;
+  color: var(--muted);
+}
+
+.story a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.story a:hover .story-headline {
+  text-decoration: underline;
+  text-decoration-color: var(--accent);
+  text-underline-offset: 3px;
+}
+
+.story-headline {
+  font-family: var(--headline-font);
+  font-weight: 700;
+  font-size: 1.05rem;
+  line-height: 1.25;
+}
+
+.story-desc {
+  margin-top: 0.35rem;
+  font-size: 0.9rem;
+  line-height: 1.45;
+  color: var(--ink);
+  opacity: 0.85;
+}
+
+.story-meta {
+  margin-top: 0.35rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* Lead story — big, full width, bordered below */
+.story-lead {
+  padding-bottom: 1.3rem;
+  margin-bottom: 1.3rem;
+  border-bottom: 1px solid var(--rule);
+}
+
+.story-lead .story-headline {
+  font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+  line-height: 1.15;
+}
+
+.story-lead .story-desc {
+  font-size: 1.05rem;
+  max-width: 52rem;
+}
+
+/* Newspaper columns with vertical rules */
+.story-columns {
+  column-count: 3;
+  column-gap: 2.2rem;
+  column-rule: 1px solid var(--rule);
+}
+
+.story-columns .story {
+  break-inside: avoid;
+  margin-bottom: 1.35rem;
+}
+
+/* ---------------------------------------------------------------------------
+   Footer & responsive
+--------------------------------------------------------------------------- */
+
+.site-footer {
+  border-top: 1px solid var(--rule);
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1.2rem 1.25rem 2.5rem;
+  font-size: 0.8rem;
+  font-style: italic;
+  color: var(--muted);
+  text-align: center;
+}
+
+@media (max-width: 1000px) {
+  .story-columns {
+    column-count: 2;
+  }
+}
+
+@media (max-width: 640px) {
+  .story-columns {
+    column-count: 1;
+    column-rule: none;
+  }
+  .tab-hint {
+    display: none;
+  }
+}
